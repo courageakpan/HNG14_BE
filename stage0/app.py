@@ -45,5 +45,29 @@ def classify():
         is_confident = (probability >= 0.7) and (sample_size >= 100)
         
         processed_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-        
+
+        return jsonify({
+            "status": "success",
+            "data": {
+                "name": name.lower(),
+                "gender": gender,
+                "probability": probability,
+                "sample_size": sample_size,
+                "is_confident": is_confident,
+                "processed_at": processed_at
+            }
+        }), 200
+    except requests.exceptions.RequestException:
+        return jsonify({
+            "status": "error",
+            "message": "Failed to connect to external service"
+        }), 500
+    
+    except Exception:
+        return jsonify({
+            "status": "error",
+            "message": "Internal server error"
+        }), 500
+    
+
             
