@@ -30,12 +30,12 @@ def classify():
                 "message": "Upstream service error"
             }), 502
         
-        data = response.json()
+        data = response.json
         gender = data.get("gender")
         probability = float(data.get("probability", 0))
         count = data.get("count")
 
-        if not gender or count == 0 or count < 5:
+        if gender is None or count == 0:
             return jsonify({
                 "status": "error",
                 "message": "No prediction available for the provided name"
