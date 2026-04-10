@@ -22,7 +22,7 @@ def classify():
     
     try:
         
-        response = requests.get(GENDERIZE_URL, params={"name": name}, timeout=2)
+        response = requests.get(GENDERIZE_URL, params={"name": name}, timeout=5)
 
         if response.status_code != 200:
             return jsonify({
@@ -30,12 +30,12 @@ def classify():
                 "message": "Upstream service error"
             }), 502
         
-        data = response.json
+        data = response.json()
         gender = data.get("gender")
-        probability = data.get("probability")
+        probability = float(data.get("probability", 0))
         count = data.get("count")
 
-        if gender is None or count  == 0:
+        if not gender or count == 0 or count < 5:
             return jsonify({
                 "status": "error",
                 "message": "No prediction available for the provided name"
@@ -44,12 +44,16 @@ def classify():
         sample_size = count
         is_confident = (probability >= 0.7) and (sample_size >= 100)
         
-        processed_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        processed_at = datetime.now(timezone.utc)\
+                    .replace(microsecond=0)\
+                    .isoformat()\
+                    .replace("+00:00", "Z")
+                    
 
         return jsonify({
             "status": "success",
             "data": {
-                "name": name.lower(),
+                "name": name,
                 "gender": gender,
                 "probability": probability,
                 "sample_size": sample_size,
@@ -69,5 +73,12 @@ def classify():
             "message": "Internal server error"
         }), 500
     
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+if __name__ == "__main__":
+    app.run(debug=True)    
 
             
