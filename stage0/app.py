@@ -30,10 +30,10 @@ def classify():
                 "message": "Upstream service error"
             }), 502
         
-        data = response.json
+        data = response.json()
         gender = data.get("gender")
-        probability = float(data.get("probability", 0))
-        count = data.get("count")
+        probability = data.get("probability") or 0
+        count = data.get("count") or 0
 
         if gender is None or count == 0:
             return jsonify({
@@ -53,7 +53,7 @@ def classify():
         return jsonify({
             "status": "success",
             "data": {
-                "name": name,
+                "name": name.lower(),
                 "gender": gender,
                 "probability": probability,
                 "sample_size": sample_size,
