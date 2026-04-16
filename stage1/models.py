@@ -2,9 +2,9 @@ from extensions import db
 from datetime import datetime
 
 class Profile(db.Model):
-    Table_name = 'profiles'
+    __tablename__ = 'profiles'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
 
     gender = db.Column(db.String)
