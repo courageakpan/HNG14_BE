@@ -9,6 +9,9 @@ from sqlalchemy import func
 
 
 def register_routes(app):
+    @app.route('/ping')
+    def ping():
+        return "NEW CODE WORKING"
 
     # ===============================
     # /api/profiles (POST, GET)
