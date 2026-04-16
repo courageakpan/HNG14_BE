@@ -131,7 +131,10 @@ def register_routes(app):
 
     @app.route('/api/profiles/<id>', methods=['DELETE'])
     def delete_profile(id):
+        print("DELETE ROUTE HIT")  # 👈 ADD THIS
+
         profile = db.session.get(Profile, id)
+        
 
         if not profile:
             return jsonify({
