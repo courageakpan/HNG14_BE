@@ -36,9 +36,7 @@ def register_routes(app):
 
         name = name.lower().strip()
 
-        existing_profile = Profile.query.filter(
-            func.lower(Profile.name) == name
-        ).first()
+        existing_profile = Profile.query.filter_by(name=name).first()
 
         if existing_profile:
             return jsonify({
