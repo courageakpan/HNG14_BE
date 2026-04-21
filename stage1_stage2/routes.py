@@ -9,6 +9,11 @@ from sqlalchemy import func
 
 
 def register_routes(app):
+
+    @app.route('/ping')
+    def ping():
+        return "STAGE 2 NEW CODE LIVE"
+
     @app.route('/api/profiles', methods=['POST'])
     def create_profile():
         data = request.get_json(silent=True)
